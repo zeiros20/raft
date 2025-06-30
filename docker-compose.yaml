@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  node1:
+    image: raft-base-node
+    container_name: node1
+    networks:
+      - raft-net
+    volumes:
+      - ./config/node1.yaml:/app/config.yaml
+    command: -config /app/config.yaml
+
+  node2:
+    image: raft-base-node
+    container_name: node2
+    networks:
+      - raft-net
+    volumes:
+      - ./config/node2.yaml:/app/config.yaml
+    command: -config /app/config.yaml
+
+  node3:
+    image: raft-base-node
+    container_name: node3
+    networks:
+      - raft-net
+    volumes:
+      - ./config/node3.yaml:/app/config.yaml
+    command: -config /app/config.yaml
+
+networks:
+  raft-net:
+    driver: bridge

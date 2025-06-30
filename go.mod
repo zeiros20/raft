@@ -1,5 +1,5 @@
-module raft
+module github.com/zeiros20/raft
 
 go 1.24.4
 
-require github.com/zeiros20/raft v0.0.0-20250630123041-34a7a5a6fcb6
+require gopkg.in/yaml.v3 v3.0.1 // indirect

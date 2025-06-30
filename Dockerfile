@@ -1,21 +1,23 @@
-FROM golang:1.23-alpine
+FROM golang:1.24-alpine
 
-# Install Git because Go mod needs it
+# Install git so Go can fetch modules (even if not needed now)
 RUN apk add --no-cache git
 
+# Set working directory
 WORKDIR /app
 
-# Copy go.mod and go.sum first (to leverage layer caching)
+# Copy mod files first to use Docker layer caching
 COPY go.mod go.sum ./
 
 # Download dependencies
 RUN go mod download
 
-# Now copy the full source
+# Copy the rest of the project
 COPY . .
 
-# Build the binary from main/main.go
-RUN go build -o raft-node ./main
+# Build the binary
+RUN go build -o raft-node main.go
 
 # Run the binary
-CMD ["./raft-node"]
+ENTRYPOINT ["./raft-node"]
+

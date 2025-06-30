@@ -1,0 +1,8 @@
+node_id: node1
+listen_address: 0.0.0.0:8000
+
+peers:
+  - id: node2
+    address: node2:8000
+  - id: node3
+    address: node3:8000

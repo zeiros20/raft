@@ -10,17 +10,11 @@ const (
 	Leader    Role = "Leader"
 )
 
-type ClusterStructure struct {
-	NodeID  string
-	Address string
-	Port    int
-}
-
 type RaftNode struct {
 	// Nodes structure
 	ID            string
 	CurrentLeader string
-	Cluster       []ClusterStructure
+	Cluster       []Peer
 
 	// Raft state
 	CurrentTerm int
@@ -29,13 +23,16 @@ type RaftNode struct {
 
 	// Log entries
 	Log []LogEntry
+
+	// Network communication
+	PeerInfo Peer
 }
 
 func NewRaftNode(id string) *RaftNode {
 	return &RaftNode{
 		ID:            id,
 		CurrentLeader: "",
-		Cluster:       []ClusterStructure{},
+		Cluster:       []Peer{},
 		CurrentTerm:   0,
 		VotedFor:      "",
 		Log:           []LogEntry{},
@@ -45,10 +42,11 @@ func NewRaftNode(id string) *RaftNode {
 
 func (n *RaftNode) ViewNode() {
 	fmt.Printf("Node ID: %s\n", n.ID)
+	fmt.Printf("Address: %s\n", n.PeerInfo.Address)
 	fmt.Printf("Current Leader: %s\n", n.CurrentLeader)
 	fmt.Println("Cluster Nodes:")
 	for _, node := range n.Cluster {
-		fmt.Printf("  Node ID: %s, Address: %s, Port: %d\n", node.NodeID, node.Address, node.Port)
+		fmt.Printf("  Node ID: %s, Address: %s\n", node.ID, node.Address)
 	}
 	fmt.Printf("Current Term: %d\n", n.CurrentTerm)
 	fmt.Printf("Voted For: %s\n", n.VotedFor)
