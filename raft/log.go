@@ -1,4 +1,3 @@
-// raft/log.go
 package raft
 
 type LogEntry struct {
