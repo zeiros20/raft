@@ -46,7 +46,7 @@ func (n *RaftNode) ViewNode() {
 	fmt.Printf("Current Leader: %s\n", n.CurrentLeader)
 	fmt.Println("Cluster Nodes:")
 	for _, node := range n.Cluster {
-		fmt.Printf("  Node ID: %s, Address: %s\n", node.ID, node.Address)
+		fmt.Printf("Node ID: %s, Address: %s, Port %d\n", node.ID, node.Address, node.Port)
 	}
 	fmt.Printf("Current Term: %d\n", n.CurrentTerm)
 	fmt.Printf("Voted For: %s\n", n.VotedFor)
