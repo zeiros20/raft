@@ -2,28 +2,30 @@ package raft
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"net"
 )
 
-func handleRequestVote(message Message, conn net.Conn) {
-	log.Printf("Received RequestVote from %s for term %d", message.Sender, message.Term)
+func handleRequestVote(message Message, conn net.Conn, n *RaftNode) {
+
 }
 
-func handleAppendEntries(message Message, conn net.Conn) {
-	log.Printf("Received AppendEntries from %s for term %d", message.Sender, message.Term)
+func handleAppendEntries(message Message, conn net.Conn, n *RaftNode) {
+	logMessage := fmt.Sprintf("AppendEntries from %s for term %d", message.Sender, message.Term)
+	InfoLogger.Println(logMessage)
 }
 
-func handleResponseVote(message Message, conn net.Conn) {
-	log.Printf("Received ResponseVote from %s for term %d", message.Sender, message.Term)
+func handleResponseVote(message Message, conn net.Conn, n *RaftNode) {
+
 }
 
-func handleHeartbeat(message Message, conn net.Conn) {
-	log.Printf("Received Heartbeat from %s for term %d", message.Sender, message.Term)
+func handleHeartbeat(message Message, conn net.Conn, n *RaftNode) {
+
 }
 
-func handleHeartbeatResponse(message Message, conn net.Conn) {
-	log.Printf("Received HeartbeatResponse from %s for term %d", message.Sender, message.Term)
+func handleHeartbeatResponse(message Message, conn net.Conn, n *RaftNode) {
+	logMessage := fmt.Sprintf("HeartbeatResponse from %s for term %d", message.Sender, message.Term)
+	InfoLogger.Println(logMessage)
 }
 
 func (n *RaftNode) HandleConnection(conn net.Conn) {
@@ -37,17 +39,17 @@ func (n *RaftNode) HandleConnection(conn net.Conn) {
 
 	switch message.Type {
 	case RequestVote:
-		handleRequestVote(message, conn)
+		handleRequestVote(message, conn, n)
 	case AppendEntries:
-		handleAppendEntries(message, conn)
+		handleAppendEntries(message, conn, n)
 	case ResponseVote:
-		handleResponseVote(message, conn)
+		handleResponseVote(message, conn, n)
 	case Heartbeat:
-		handleHeartbeat(message, conn)
+		handleHeartbeat(message, conn, n)
 	case HeartbeatResponse:
-		handleHeartbeatResponse(message, conn)
+		handleHeartbeatResponse(message, conn, n)
 	default:
-		log.Printf("❌ Unknown message type: %s from %s", message.Type, message.Sender)
+		ErrorLogger.Printf("❌ Unknown message type: %s from %s", message.Type, message.Sender)
 	}
 }
 
@@ -60,10 +62,9 @@ func (n *RaftNode) SendMessage(message Message, address string) error {
 
 	encoder := json.NewEncoder(conn)
 	if err := encoder.Encode(message); err != nil {
-		log.Println("❌ Error encoding message:", err)
+		ErrorLogger.Println("❌ Error encoding message:", err)
 		return err
 	}
 
-	log.Printf("✅ Sent message of type %s to %s", message.Type, address)
 	return nil
 }
